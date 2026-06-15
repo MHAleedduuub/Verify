@@ -5,51 +5,712 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description" content="Link your Minecraft account with Discord - Kabaruh Network Verification System">
     <meta name="theme-color" content="#4CAF50">
-    <meta name="keywords" content="minecraft, discord, verification, kabaruh">
-    <meta name="author" content="Kabaruh Network">
-    <meta property="og:title" content="Minecraft Verification | Kabaruh">
-    <meta property="og:description" content="Link your Minecraft account with Discord">
-    <meta property="og:type" content="website">
-    <meta property="og:url" content="https://verify.abukabaruh.kdns.fr">
-    <meta property="og:image" content="https://verify.abukabaruh.kdns.fr/og-image.png">
     
     <title>Minecraft Verification | Kabaruh Network</title>
     
     <!-- Favicon -->
     <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🎮</text></svg>">
     
-    <!-- Font Awesome 6 -->
+    <!-- Font Awesome -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     
     <!-- Google Fonts -->
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
     
-    <!-- Styles -->
-    <link rel="stylesheet" href="style.css">
-    
-    <!-- Handle OAuth callback before page loads -->
+    <!-- Handle OAuth callback -->
     <script>
         (function() {
             if (window.location.hash && window.location.hash.includes('access_token')) {
-                const params = new URLSearchParams(window.location.hash.substring(1));
-                const token = params.get('access_token');
-                const error = params.get('error');
-                
-                if (error) {
-                    console.error('OAuth Error:', error);
-                    sessionStorage.setItem('oauth_error', error);
-                }
-                
+                var params = new URLSearchParams(window.location.hash.substring(1));
+                var token = params.get('access_token');
                 if (token) {
                     localStorage.setItem('mc_token', JSON.stringify(token));
-                    // Clean URL without reload
                     window.location.hash = '';
                 }
             }
         })();
     </script>
+
+    <style>
+        /* ============================================ */
+        /* MINECRAFT VERIFICATION - COMPLETE STYLES     */
+        /* ============================================ */
+
+        :root {
+            --primary: #4CAF50;
+            --primary-dark: #388E3C;
+            --primary-light: #81C784;
+            --discord: #5865F2;
+            --discord-dark: #4752C4;
+            --bg-body: #0a0a0f;
+            --bg-card: rgba(18, 18, 30, 0.95);
+            --text-primary: #ffffff;
+            --text-secondary: rgba(255, 255, 255, 0.75);
+            --text-muted: rgba(255, 255, 255, 0.45);
+            --border: rgba(255, 255, 255, 0.08);
+            --border-hover: rgba(255, 255, 255, 0.15);
+            --danger: #ff4757;
+            --warning: #ffa502;
+            --info: #2196F3;
+            --gold: #FFD700;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background: var(--bg-body);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+            font-family: 'Inter', 'Segoe UI', system-ui, sans-serif;
+            position: relative;
+            overflow-x: hidden;
+        }
+
+        /* Background */
+        .animated-bg {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 0;
+            pointer-events: none;
+        }
+
+        .bg-gradient {
+            position: absolute;
+            border-radius: 50%;
+            filter: blur(120px);
+            opacity: 0.15;
+            animation: float 8s ease-in-out infinite;
+        }
+
+        .bg-gradient-1 {
+            width: 600px;
+            height: 600px;
+            background: var(--primary);
+            top: -200px;
+            left: -200px;
+            animation-delay: 0s;
+        }
+
+        .bg-gradient-2 {
+            width: 500px;
+            height: 500px;
+            background: var(--discord);
+            bottom: -150px;
+            right: -150px;
+            animation-delay: -3s;
+        }
+
+        .bg-gradient-3 {
+            width: 400px;
+            height: 400px;
+            background: var(--info);
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            animation-delay: -6s;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translate(0, 0) scale(1); }
+            33% { transform: translate(30px, -30px) scale(1.1); }
+            66% { transform: translate(-20px, 20px) scale(0.9); }
+        }
+
+        /* Container */
+        .container {
+            background: var(--bg-card);
+            backdrop-filter: blur(30px);
+            -webkit-backdrop-filter: blur(30px);
+            border-radius: 24px;
+            padding: 40px;
+            width: 100%;
+            max-width: 540px;
+            box-shadow: 0 16px 48px rgba(0, 0, 0, 0.4), 0 0 0 1px var(--border);
+            position: relative;
+            z-index: 1;
+            animation: fadeInUp 0.6s ease;
+            border: 1px solid var(--border);
+        }
+
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(30px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Logo */
+        .logo-section {
+            text-align: center;
+            margin-bottom: 32px;
+        }
+
+        .logo {
+            font-size: 64px;
+            color: var(--primary);
+            margin-bottom: 16px;
+            animation: logoFloat 3s ease-in-out infinite;
+            filter: drop-shadow(0 0 30px rgba(76, 175, 80, 0.4));
+            display: inline-block;
+        }
+
+        @keyframes logoFloat {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-12px); }
+        }
+
+        .title {
+            font-size: 34px;
+            font-weight: 800;
+            background: linear-gradient(135deg, var(--primary), var(--info), var(--discord));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 8px;
+        }
+
+        .subtitle {
+            color: var(--text-secondary);
+            font-size: 15px;
+        }
+
+        /* Step Container */
+        .step-container {
+            animation: fadeIn 0.4s ease;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        /* Step Card */
+        .step-card {
+            background: rgba(255, 255, 255, 0.02);
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            padding: 24px;
+            margin-bottom: 16px;
+            transition: all 0.3s ease;
+        }
+
+        .step-card:hover {
+            border-color: var(--border-hover);
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+        }
+
+        .step-header {
+            display: flex;
+            align-items: flex-start;
+            gap: 14px;
+            margin-bottom: 16px;
+        }
+
+        .step-number {
+            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+            color: white;
+            width: 34px;
+            height: 34px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            font-size: 15px;
+            flex-shrink: 0;
+            box-shadow: 0 4px 15px rgba(76, 175, 80, 0.3);
+        }
+
+        .step-title-group h3 {
+            color: var(--text-primary);
+            font-size: 18px;
+            font-weight: 600;
+            margin-bottom: 4px;
+        }
+
+        .step-badge {
+            font-size: 10px;
+            padding: 2px 8px;
+            border-radius: 20px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            background: rgba(76, 175, 80, 0.15);
+            color: var(--primary);
+        }
+
+        .step-badge-info {
+            background: rgba(33, 150, 243, 0.15);
+            color: var(--info);
+        }
+
+        .step-desc {
+            color: var(--text-secondary);
+            font-size: 14px;
+            line-height: 1.6;
+            margin-bottom: 20px;
+        }
+
+        /* Features */
+        .features-list {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            margin-bottom: 24px;
+            padding: 16px;
+            background: rgba(255, 255, 255, 0.02);
+            border-radius: 12px;
+            border: 1px solid var(--border);
+        }
+
+        .feature-item {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            color: var(--text-secondary);
+            font-size: 13px;
+        }
+
+        .feature-item i {
+            color: var(--primary);
+            font-size: 14px;
+            width: 20px;
+            text-align: center;
+        }
+
+        /* User Card */
+        .user-card {
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            padding: 16px;
+            margin-bottom: 16px;
+            display: flex;
+            align-items: center;
+            gap: 14px;
+        }
+
+        .user-avatar {
+            width: 52px;
+            height: 52px;
+            border-radius: 50%;
+            border: 2px solid var(--primary);
+            box-shadow: 0 0 20px rgba(76, 175, 80, 0.2);
+        }
+
+        .user-name {
+            color: var(--text-primary);
+            font-weight: 600;
+            font-size: 15px;
+        }
+
+        .badge {
+            font-size: 10px;
+            padding: 3px 8px;
+            border-radius: 20px;
+            font-weight: 600;
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+        }
+
+        .badge-discord {
+            background: rgba(88, 101, 242, 0.15);
+            color: var(--discord);
+        }
+
+        .badge-pending {
+            background: rgba(255, 165, 2, 0.15);
+            color: var(--warning);
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.6; }
+        }
+
+        /* Input */
+        .input-group {
+            margin-bottom: 20px;
+        }
+
+        .input-label {
+            display: block;
+            color: var(--text-secondary);
+            font-size: 12px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 8px;
+        }
+
+        .input-wrapper {
+            position: relative;
+        }
+
+        .minecraft-input {
+            width: 100%;
+            padding: 14px 16px;
+            background: rgba(255, 255, 255, 0.04);
+            border: 2px solid var(--border);
+            border-radius: 12px;
+            color: var(--text-primary);
+            font-size: 15px;
+            font-family: 'Courier New', monospace;
+            letter-spacing: 1px;
+            transition: all 0.3s ease;
+            outline: none;
+        }
+
+        .minecraft-input:focus {
+            border-color: var(--primary);
+            box-shadow: 0 0 25px rgba(76, 175, 80, 0.15);
+            background: rgba(255, 255, 255, 0.06);
+        }
+
+        .minecraft-input::placeholder {
+            color: var(--text-muted);
+            letter-spacing: 0;
+            font-family: 'Inter', sans-serif;
+        }
+
+        .input-hint {
+            display: block;
+            color: var(--text-muted);
+            font-size: 11px;
+            margin-top: 6px;
+        }
+
+        /* Skin Preview */
+        .skin-preview-container {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            padding: 14px;
+            background: rgba(255, 255, 255, 0.02);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            margin-bottom: 20px;
+        }
+
+        .skin-preview {
+            width: 64px;
+            image-rendering: pixelated;
+            border-radius: 8px;
+        }
+
+        .skin-name {
+            color: var(--text-primary);
+            font-weight: 600;
+            font-size: 14px;
+        }
+
+        .skin-badge {
+            font-size: 10px;
+            color: var(--text-muted);
+            text-transform: uppercase;
+        }
+
+        /* Buttons */
+        .btn {
+            width: 100%;
+            padding: 14px;
+            border: none;
+            border-radius: 12px;
+            font-size: 15px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+        }
+
+        .btn:active {
+            transform: scale(0.98);
+        }
+
+        .btn-discord {
+            background: var(--discord);
+            color: white;
+        }
+
+        .btn-discord:hover {
+            background: var(--discord-dark);
+            box-shadow: 0 8px 25px rgba(88, 101, 242, 0.35);
+        }
+
+        .btn-verify {
+            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+            color: white;
+        }
+
+        .btn-verify:hover {
+            box-shadow: 0 8px 25px rgba(76, 175, 80, 0.35);
+        }
+
+        .btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            pointer-events: none;
+        }
+
+        /* Alert */
+        .alert {
+            padding: 14px 18px;
+            border-radius: 12px;
+            margin-bottom: 20px;
+            font-size: 14px;
+            font-weight: 500;
+            animation: slideDown 0.3s ease;
+        }
+
+        @keyframes slideDown {
+            from { opacity: 0; transform: translateY(-10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .alert-success {
+            background: rgba(76, 175, 80, 0.12);
+            border: 1px solid rgba(76, 175, 80, 0.3);
+            color: var(--primary-light);
+        }
+
+        .alert-error {
+            background: rgba(255, 71, 87, 0.12);
+            border: 1px solid rgba(255, 71, 87, 0.3);
+            color: var(--danger);
+        }
+
+        .alert-info {
+            background: rgba(33, 150, 243, 0.12);
+            border: 1px solid rgba(33, 150, 243, 0.3);
+            color: var(--info);
+        }
+
+        .alert-warning {
+            background: rgba(255, 165, 2, 0.12);
+            border: 1px solid rgba(255, 165, 2, 0.3);
+            color: var(--warning);
+        }
+
+        /* Success */
+        .success-card {
+            text-align: center;
+            border-color: rgba(76, 175, 80, 0.3) !important;
+        }
+
+        .success-circle {
+            width: 70px;
+            height: 70px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 20px;
+            animation: scaleIn 0.5s ease;
+            box-shadow: 0 0 40px rgba(76, 175, 80, 0.3);
+        }
+
+        .success-circle i {
+            color: white;
+            font-size: 32px;
+        }
+
+        @keyframes scaleIn {
+            from { transform: scale(0) rotate(-180deg); }
+            to { transform: scale(1) rotate(0deg); }
+        }
+
+        .success-title {
+            font-size: 24px;
+            font-weight: 700;
+            margin-bottom: 10px;
+            background: linear-gradient(135deg, var(--primary), var(--info));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .success-desc {
+            color: var(--text-secondary);
+            font-size: 14px;
+            line-height: 1.6;
+            margin-bottom: 24px;
+        }
+
+        /* Info Cards */
+        .info-cards {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            margin-bottom: 24px;
+        }
+
+        .info-card {
+            display: flex;
+            align-items: flex-start;
+            gap: 12px;
+            padding: 14px;
+            background: rgba(255, 255, 255, 0.02);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            text-align: left;
+        }
+
+        .info-card i {
+            color: var(--primary);
+            font-size: 20px;
+            margin-top: 2px;
+        }
+
+        .info-card strong {
+            color: var(--text-primary);
+            font-size: 13px;
+            display: block;
+            margin-bottom: 2px;
+        }
+
+        .info-card p {
+            color: var(--text-secondary);
+            font-size: 12px;
+        }
+
+        /* Action Buttons */
+        .action-buttons {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .btn-secondary {
+            background: rgba(255, 255, 255, 0.06);
+            color: var(--text-primary);
+            border: 1px solid var(--border);
+        }
+
+        .btn-secondary:hover {
+            background: rgba(255, 255, 255, 0.1);
+        }
+
+        .btn-logout {
+            background: var(--danger);
+            color: white;
+            margin-top: 8px;
+        }
+
+        .btn-logout:hover {
+            box-shadow: 0 8px 25px rgba(255, 71, 87, 0.35);
+        }
+
+        /* Footer */
+        .footer {
+            margin-top: 24px;
+            text-align: center;
+        }
+
+        .server-info {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            padding: 12px 16px;
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            color: var(--text-muted);
+            font-size: 13px;
+            margin-bottom: 12px;
+        }
+
+        .server-info i {
+            color: var(--primary);
+        }
+
+        .footer-links {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            margin-bottom: 8px;
+        }
+
+        .footer-link {
+            color: var(--text-muted);
+            font-size: 12px;
+            text-decoration: none;
+            transition: color 0.3s;
+        }
+
+        .footer-link:hover {
+            color: var(--text-primary);
+        }
+
+        .footer-divider {
+            color: var(--text-muted);
+            font-size: 8px;
+        }
+
+        .copyright {
+            color: var(--text-muted);
+            font-size: 11px;
+        }
+
+        /* Hidden */
+        .hidden {
+            display: none !important;
+        }
+
+        /* Spinner */
+        .spinner {
+            display: inline-block;
+            width: 18px;
+            height: 18px;
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            border-radius: 50%;
+            border-top-color: white;
+            animation: spin 0.7s linear infinite;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        /* Responsive */
+        @media (max-width: 600px) {
+            .container {
+                padding: 24px 20px;
+                border-radius: 20px;
+            }
+            .title {
+                font-size: 26px;
+            }
+            .logo {
+                font-size: 48px;
+            }
+        }
+
+        /* Selection */
+        ::selection {
+            background: rgba(76, 175, 80, 0.3);
+            color: white;
+        }
+    </style>
 </head>
 <body>
     <!-- Animated Background -->
@@ -57,331 +718,137 @@
         <div class="bg-gradient bg-gradient-1"></div>
         <div class="bg-gradient bg-gradient-2"></div>
         <div class="bg-gradient bg-gradient-3"></div>
-        <div class="bg-particles" id="bgParticles"></div>
     </div>
 
     <!-- Main Container -->
     <div class="container">
         <!-- Logo Section -->
         <div class="logo-section">
-            <div class="logo-wrapper">
-                <div class="logo">
-                    <i class="fas fa-cube"></i>
-                </div>
-                <div class="logo-glow"></div>
+            <div class="logo">
+                <i class="fas fa-cube"></i>
             </div>
-            <h1 class="title">
-                <span class="title-minecraft">Minecraft</span>
-                <span class="title-divider">•</span>
-                <span class="title-verify">Verification</span>
-            </h1>
-            <p class="subtitle">Link your Minecraft account with Discord to access the server</p>
-            <div class="title-underline"></div>
+            <h1 class="title">Minecraft Verification</h1>
+            <p class="subtitle">Link your Minecraft account with Discord</p>
         </div>
 
         <!-- Alert Box -->
         <div id="alertBox" class="alert hidden"></div>
 
-        <!-- ==================== STEP 1: LOGIN ==================== -->
+        <!-- STEP 1: LOGIN -->
         <div id="step1" class="step-container">
             <div class="step-card">
                 <div class="step-header">
-                    <div class="step-number">
-                        <span>1</span>
-                    </div>
+                    <div class="step-number">1</div>
                     <div class="step-title-group">
                         <h3>Login with Discord</h3>
-                        <span class="step-badge">Required Step</span>
+                        <span class="step-badge">Required</span>
                     </div>
                 </div>
-                <p class="step-desc">
-                    You need to authenticate with your Discord account before linking your Minecraft profile. 
-                    This ensures secure verification and prevents impersonation.
-                </p>
+                <p class="step-desc">Authenticate with Discord to link your Minecraft account securely.</p>
                 
                 <div class="features-list">
                     <div class="feature-item">
-                        <div class="feature-icon">
-                            <i class="fas fa-shield-haltered"></i>
-                        </div>
-                        <div class="feature-text">
-                            <strong>Secure Authentication</strong>
-                            <span>Official Discord OAuth2 protocol</span>
-                        </div>
+                        <i class="fas fa-shield-alt"></i>
+                        <span>Secure Authentication</span>
                     </div>
                     <div class="feature-item">
-                        <div class="feature-icon">
-                            <i class="fas fa-bolt"></i>
-                        </div>
-                        <div class="feature-text">
-                            <strong>Quick & Easy</strong>
-                            <span>One-click login process</span>
-                        </div>
+                        <i class="fas fa-bolt"></i>
+                        <span>Quick & Easy</span>
                     </div>
                     <div class="feature-item">
-                        <div class="feature-icon">
-                            <i class="fas fa-user-shield"></i>
-                        </div>
-                        <div class="feature-text">
-                            <strong>Privacy Protected</strong>
-                            <span>We only access your username and avatar</span>
-                        </div>
-                    </div>
-                    <div class="feature-item">
-                        <div class="feature-icon">
-                            <i class="fas fa-check-circle"></i>
-                        </div>
-                        <div class="feature-text">
-                            <strong>Instant Verification</strong>
-                            <span>Get verified within minutes</span>
-                        </div>
+                        <i class="fas fa-check-circle"></i>
+                        <span>Official Discord OAuth2</span>
                     </div>
                 </div>
 
-                <div class="divider">
-                    <span>Click below to continue</span>
-                </div>
-
-                <button class="btn btn-discord" onclick="loginWithDiscord()" id="loginBtn">
+                <button class="btn btn-discord" onclick="loginWithDiscord()">
                     <i class="fab fa-discord"></i>
-                    <span>Login with Discord</span>
-                    <i class="fas fa-arrow-right"></i>
+                    Login with Discord
                 </button>
-
-                <p class="terms-text">
-                    By logging in, you agree to our 
-                    <a href="#">Terms of Service</a> and 
-                    <a href="#">Privacy Policy</a>
-                </p>
-            </div>
-
-            <!-- Stats Cards -->
-            <div class="stats-row">
-                <div class="stat-card">
-                    <div class="stat-icon">
-                        <i class="fas fa-users"></i>
-                    </div>
-                    <div class="stat-number" id="verifiedCount">0</div>
-                    <div class="stat-label">Verified Users</div>
-                </div>
-                <div class="stat-card">
-                    <div class="stat-icon">
-                        <i class="fas fa-server"></i>
-                    </div>
-                    <div class="stat-number">24/7</div>
-                    <div class="stat-label">Online Server</div>
-                </div>
-                <div class="stat-card">
-                    <div class="stat-icon">
-                        <i class="fas fa-clock"></i>
-                    </div>
-                    <div class="stat-number">&lt;5min</div>
-                    <div class="stat-label">Avg. Wait Time</div>
-                </div>
             </div>
         </div>
 
-        <!-- ==================== STEP 2: VERIFICATION ==================== -->
+        <!-- STEP 2: VERIFICATION -->
         <div id="step2" class="step-container hidden">
-            <!-- User Profile Card -->
             <div class="user-card">
-                <div class="user-avatar-wrapper">
-                    <img id="userAvatar" class="user-avatar" src="" alt="Discord Avatar">
-                    <span class="online-dot"></span>
-                </div>
+                <img id="userAvatar" class="user-avatar" src="" alt="Avatar">
                 <div class="user-info">
                     <div id="userName" class="user-name">Loading...</div>
-                    <div class="user-badges">
-                        <span class="badge badge-discord">
-                            <i class="fab fa-discord"></i> Connected
-                        </span>
-                    </div>
-                </div>
-                <div class="user-actions">
-                    <button class="btn-icon" onclick="logout()" title="Logout">
-                        <i class="fas fa-sign-out-alt"></i>
-                    </button>
+                    <span class="badge badge-discord">
+                        <i class="fab fa-discord"></i> Connected
+                    </span>
                 </div>
             </div>
 
-            <!-- Verification Form -->
             <div class="step-card">
                 <div class="step-header">
-                    <div class="step-number">
-                        <span>2</span>
-                    </div>
+                    <div class="step-number">2</div>
                     <div class="step-title-group">
-                        <h3>Enter Minecraft Username</h3>
-                        <span class="step-badge step-badge-info">Account Link</span>
+                        <h3>Minecraft Username</h3>
+                        <span class="step-badge step-badge-info">Verification</span>
                     </div>
                 </div>
-                <p class="step-desc">
-                    Type your exact Minecraft Java Edition username below. 
-                    Make sure it matches your in-game name exactly, including capitalization.
-                </p>
+                <p class="step-desc">Enter your exact Minecraft Java Edition username.</p>
                 
                 <div class="input-group">
-                    <label class="input-label">
-                        <i class="fas fa-gamepad"></i>
-                        <span>Minecraft Username</span>
-                        <span class="required">*</span>
-                    </label>
+                    <label class="input-label">Minecraft Username</label>
                     <div class="input-wrapper">
-                        <div class="input-icon-left">
-                            <i class="fas fa-user"></i>
-                        </div>
-                        <input type="text" 
-                               id="mcUsername" 
-                               class="minecraft-input" 
-                               placeholder="Enter your username (e.g. Notch)"
-                               maxlength="16"
-                               autocomplete="off"
-                               spellcheck="false"
-                               autocapitalize="off">
-                        <div class="input-border"></div>
-                        <div class="input-icon-right" id="usernameCheck">
-                            <i class="fas fa-circle"></i>
-                        </div>
+                        <input type="text" id="mcUsername" class="minecraft-input" placeholder="e.g. Notch" maxlength="16" autocomplete="off" spellcheck="false">
                     </div>
-                    <span class="input-hint">
-                        <i class="fas fa-info-circle"></i>
-                        3-16 characters • Letters, numbers, and underscores only
-                    </span>
+                    <span class="input-hint">3-16 characters, letters, numbers, underscore</span>
                 </div>
 
-                <!-- Skin Preview -->
                 <div id="skinPreviewContainer" class="skin-preview-container hidden">
-                    <div class="skin-preview-wrapper">
-                        <img id="skinPreview" class="skin-preview" src="" alt="Minecraft Skin">
-                        <div class="skin-overlay"></div>
-                    </div>
+                    <img id="skinPreview" class="skin-preview" src="" alt="Skin">
                     <div class="skin-info">
                         <span id="skinName" class="skin-name"></span>
-                        <span class="skin-badge">Live Preview</span>
-                        <span class="skin-uuid" id="skinUUID"></span>
-                    </div>
-                </div>
-
-                <!-- Tips Box -->
-                <div class="tips-box">
-                    <div class="tips-header">
-                        <i class="fas fa-lightbulb"></i>
-                        <strong>Tips for verification</strong>
-                    </div>
-                    <ul class="tips-list">
-                        <li><i class="fas fa-check"></i> Use your exact Minecraft username</li>
-                        <li><i class="fas fa-check"></i> Java Edition accounts only</li>
-                        <li><i class="fas fa-check"></i> Your nickname will change to this username</li>
-                        <li><i class="fas fa-times"></i> Bedrock/PE accounts not supported</li>
-                    </ul>
-                </div>
-
-                <!-- Terms -->
-                <div class="terms-box">
-                    <div class="terms-icon">
-                        <i class="fas fa-info-circle"></i>
-                    </div>
-                    <div class="terms-content">
-                        <strong>What happens next?</strong>
-                        <p>Your Discord nickname will be changed to your Minecraft username and you'll receive the <span class="highlight">Verified</span> role. This gives you access to all server channels.</p>
+                        <span class="skin-badge">Skin Preview</span>
                     </div>
                 </div>
 
                 <button id="verifyBtn" class="btn btn-verify" onclick="submitVerification()">
                     <i class="fas fa-check-circle"></i>
-                    <span>Submit Verification</span>
-                    <i class="fas fa-chevron-right"></i>
+                    Submit Verification
                 </button>
             </div>
+
+            <button class="btn btn-logout" onclick="logout()">
+                <i class="fas fa-sign-out-alt"></i> Logout
+            </button>
         </div>
 
-        <!-- ==================== STEP 3: PENDING ==================== -->
+        <!-- STEP 3: PENDING -->
         <div id="step3" class="step-container hidden">
-            <!-- User Profile Card -->
             <div class="user-card">
-                <div class="user-avatar-wrapper">
-                    <img id="userAvatar3" class="user-avatar" src="" alt="Discord Avatar">
-                </div>
+                <img id="userAvatar3" class="user-avatar" src="" alt="Avatar">
                 <div class="user-info">
                     <div id="userName3" class="user-name">Loading...</div>
-                    <div class="user-badges">
-                        <span class="badge badge-pending">
-                            <i class="fas fa-clock"></i> Pending Approval
-                        </span>
-                    </div>
+                    <span class="badge badge-pending">
+                        <i class="fas fa-clock"></i> Pending
+                    </span>
                 </div>
             </div>
 
-            <!-- Success Card -->
             <div class="step-card success-card">
-                <div class="success-animation">
-                    <div class="success-circle">
-                        <svg class="checkmark" viewBox="0 0 52 52">
-                            <circle class="checkmark-circle" cx="26" cy="26" r="25" fill="none"/>
-                            <path class="checkmark-check" fill="none" d="M14 27l7 7 16-16"/>
-                        </svg>
-                    </div>
+                <div class="success-circle">
+                    <i class="fas fa-check"></i>
                 </div>
-                
-                <h2 class="success-title">Verification Request Submitted!</h2>
-                <p class="success-desc">
-                    Your verification request has been sent to our team. 
-                    An administrator will review your request and approve it shortly.
-                </p>
-
-                <!-- Request Details -->
-                <div class="request-details">
-                    <div class="detail-item">
-                        <span class="detail-label">Status</span>
-                        <span class="detail-value status-pending-color">
-                            <span class="pulse-dot"></span> Pending Review
-                        </span>
-                    </div>
-                    <div class="detail-item">
-                        <span class="detail-label">Minecraft</span>
-                        <span class="detail-value" id="pendingMCName">-</span>
-                    </div>
-                    <div class="detail-item">
-                        <span class="detail-label">Submitted</span>
-                        <span class="detail-value" id="pendingTime">Just now</span>
-                    </div>
-                </div>
+                <h2 class="success-title">Request Submitted!</h2>
+                <p class="success-desc">Your verification has been sent. An admin will approve it soon.</p>
 
                 <div class="info-cards">
                     <div class="info-card">
-                        <div class="info-card-icon">
-                            <i class="fas fa-user-check"></i>
-                        </div>
-                        <div class="info-card-content">
+                        <i class="fas fa-user-check"></i>
+                        <div>
                             <strong>Nickname Change</strong>
-                            <p>Your Discord nickname will be set to your Minecraft username upon approval</p>
+                            <p>Your nickname will be set to your Minecraft username</p>
                         </div>
                     </div>
                     <div class="info-card">
-                        <div class="info-card-icon">
-                            <i class="fas fa-user-tag"></i>
-                        </div>
-                        <div class="info-card-content">
+                        <i class="fas fa-user-tag"></i>
+                        <div>
                             <strong>Verified Role</strong>
-                            <p>You'll automatically receive the Verified role with special permissions</p>
-                        </div>
-                    </div>
-                    <div class="info-card">
-                        <div class="info-card-icon">
-                            <i class="fas fa-clock"></i>
-                        </div>
-                        <div class="info-card-content">
-                            <strong>Approval Time</strong>
-                            <p>Most requests are approved within 5-30 minutes by our staff team</p>
-                        </div>
-                    </div>
-                    <div class="info-card">
-                        <div class="info-card-icon">
-                            <i class="fas fa-bell"></i>
-                        </div>
-                        <div class="info-card-content">
-                            <strong>Notification</strong>
-                            <p>You'll be notified in Discord when your verification is approved</p>
+                            <p>You'll receive the verified role upon approval</p>
                         </div>
                     </div>
                 </div>
@@ -389,156 +856,34 @@
                 <div class="action-buttons">
                     <button class="btn btn-discord" onclick="joinDiscord()">
                         <i class="fab fa-discord"></i>
-                        <span>Join Discord Server</span>
-                    </button>
-                    <button class="btn btn-secondary" onclick="checkStatus()" id="checkStatusBtn">
-                        <i class="fas fa-sync-alt"></i>
-                        <span>Check Status</span>
+                        Join Discord Server
                     </button>
                 </div>
-
-                <p class="help-text">
-                    <i class="fas fa-question-circle"></i>
-                    Need help? Contact a staff member on Discord
-                </p>
-            </div>
-        </div>
-
-        <!-- ==================== STEP 4: VERIFIED ==================== -->
-        <div id="step4" class="step-container hidden">
-            <!-- User Profile Card -->
-            <div class="user-card verified-card">
-                <div class="user-avatar-wrapper">
-                    <img id="userAvatar4" class="user-avatar verified-avatar" src="" alt="Discord Avatar">
-                    <div class="verified-badge-icon">
-                        <i class="fas fa-check"></i>
-                    </div>
-                </div>
-                <div class="user-info">
-                    <div id="userName4" class="user-name">Loading...</div>
-                    <div class="user-badges">
-                        <span class="badge badge-verified">
-                            <i class="fas fa-check-circle"></i> Verified
-                        </span>
-                    </div>
-                </div>
             </div>
 
-            <!-- Verified Success Card -->
-            <div class="step-card verified-success-card">
-                <div class="verified-icon-wrapper">
-                    <div class="verified-icon">
-                        <i class="fas fa-trophy"></i>
-                    </div>
-                    <div class="verified-stars">
-                        <i class="fas fa-star"></i>
-                        <i class="fas fa-star"></i>
-                        <i class="fas fa-star"></i>
-                    </div>
-                </div>
-                
-                <h2 class="success-title verified-title">You're Verified!</h2>
-                <p class="success-desc">
-                    Congratulations! Your Minecraft account has been successfully linked with Discord. 
-                    You now have full access to the server.
-                </p>
-                
-                <!-- Verified Details -->
-                <div id="verifiedDetails" class="verified-details">
-                    <div class="detail-row">
-                        <span class="detail-key">Minecraft</span>
-                        <span class="detail-val" id="verifiedMCName">-</span>
-                    </div>
-                    <div class="detail-row">
-                        <span class="detail-key">Discord</span>
-                        <span class="detail-val" id="verifiedDiscordName">-</span>
-                    </div>
-                    <div class="detail-row">
-                        <span class="detail-key">Verified</span>
-                        <span class="detail-val verified-date" id="verifiedDate">-</span>
-                    </div>
-                </div>
-
-                <!-- Perks -->
-                <div class="perks-list">
-                    <h4><i class="fas fa-gift"></i> Your Perks</h4>
-                    <div class="perk-item">
-                        <i class="fas fa-check-circle"></i>
-                        <span>Full server access</span>
-                    </div>
-                    <div class="perk-item">
-                        <i class="fas fa-check-circle"></i>
-                        <span>Verified role badge</span>
-                    </div>
-                    <div class="perk-item">
-                        <i class="fas fa-check-circle"></i>
-                        <span>Custom nickname</span>
-                    </div>
-                    <div class="perk-item">
-                        <i class="fas fa-check-circle"></i>
-                        <span>Access to verified channels</span>
-                    </div>
-                </div>
-
-                <button class="btn btn-discord" onclick="joinDiscord()">
-                    <i class="fab fa-discord"></i>
-                    <span>Go to Discord Server</span>
-                    <i class="fas fa-arrow-right"></i>
-                </button>
-            </div>
+            <button class="btn btn-logout" onclick="logout()">
+                <i class="fas fa-sign-out-alt"></i> Logout
+            </button>
         </div>
 
         <!-- Footer -->
         <div class="footer">
             <div class="server-info">
-                <div class="server-status">
-                    <span class="status-dot online"></span>
-                    <span>Server Online</span>
-                </div>
-                <div class="server-ip">
-                    <i class="fas fa-server"></i>
-                    <span id="serverInfo">Loading server info...</span>
-                </div>
-                <div class="server-players">
-                    <i class="fas fa-users"></i>
-                    <span id="playerCount">-</span> players
-                </div>
+                <i class="fas fa-server"></i>
+                <span id="serverInfo">Loading...</span>
             </div>
-            
             <div class="footer-links">
-                <a href="#" class="footer-link">Terms of Service</a>
+                <a href="#" class="footer-link">Terms</a>
                 <span class="footer-divider">•</span>
-                <a href="#" class="footer-link">Privacy Policy</a>
+                <a href="#" class="footer-link">Privacy</a>
                 <span class="footer-divider">•</span>
                 <a href="#" class="footer-link">Support</a>
-                <span class="footer-divider">•</span>
-                <a href="#" class="footer-link">Status</a>
             </div>
-            
-            <div class="footer-bottom">
-                <p class="copyright">
-                    &copy; 2024 <strong>Kabaruh Network</strong>. All rights reserved.
-                </p>
-                <p class="footer-tagline">
-                    Made with <i class="fas fa-heart"></i> for the Minecraft community
-                </p>
-            </div>
+            <p class="copyright">© 2024 Kabaruh Network</p>
         </div>
     </div>
 
-    <!-- Scripts -->
-    <script type="module" src="script.js"></script>
-    
-    <!-- Auto check status every 30 seconds -->
-    <script>
-        // Auto refresh status if pending
-        if (localStorage.getItem('mc_status') === '"pending"') {
-            setInterval(() => {
-                if (typeof checkStatus === 'function') {
-                    checkStatus();
-                }
-            }, 30000);
-        }
-    </script>
+    <!-- Script -->
+    <script src="script.js"></script>
 </body>
 </html>
