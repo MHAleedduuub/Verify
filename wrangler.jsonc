@@ -4,7 +4,7 @@
   "compatibility_date": "2026-06-15",
   "assets": {
     "directory": ".",
-    "html_handling": "single_page_application"
+    "html_handling": "drop-trailing-slash"
   },
   "compatibility_flags": [
     "nodejs_compat"
