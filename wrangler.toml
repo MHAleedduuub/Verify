@@ -1,0 +1,12 @@
+{
+  "$schema": "node_modules/wrangler/config-schema.json",
+  "name": "verify",
+  "compatibility_date": "2026-06-15",
+  "assets": {
+    "directory": ".",
+    "html_handling": "single_page_application"
+  },
+  "compatibility_flags": [
+    "nodejs_compat"
+  ]
+}
