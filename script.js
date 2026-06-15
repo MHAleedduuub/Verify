@@ -5,7 +5,7 @@ import API from './apis.js';
 // ============================================
 const CONFIG = {
     clientId: '1348975754590818314',
-    redirectUri: window.location.origin + window.location.pathname,
+    redirectUri: 'https://verify.abukabaruh.kdns.fr',
     discordInvite: 'https://discord.gg/yFNuMPY3sw',
     serverIp: 'soon',
     serverName: 'Kabaruh'
