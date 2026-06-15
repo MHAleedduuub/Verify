@@ -3,32 +3,67 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Minecraft Verification</title>
+    <meta name="description" content="Link your Minecraft account with Discord - Verification System">
+    <meta name="theme-color" content="#4CAF50">
+    
+    <title>Minecraft Verification | Link Discord</title>
+    
+    <!-- Favicon -->
+    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🎮</text></svg>">
+    
+    <!-- Font Awesome -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- Styles -->
     <link rel="stylesheet" href="style.css">
-    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🎮</text></svg>">
 </head>
 <body>
+    <!-- Particles Background -->
+    <div class="particles" id="particles"></div>
+
+    <!-- Main Container -->
     <div class="container">
-        <!-- Logo -->
-        <div class="logo">
-            <i class="fas fa-cube"></i>
+        <!-- Logo Section -->
+        <div class="logo-section">
+            <div class="logo">
+                <i class="fas fa-cube"></i>
+            </div>
+            <h1 class="title">Minecraft Verification</h1>
+            <p class="subtitle">Link your Minecraft account with Discord</p>
         </div>
-        
-        <h1 class="title">Minecraft Verification</h1>
-        <p class="subtitle">Link your Minecraft account with Discord</p>
 
         <!-- Alert Box -->
         <div id="alertBox" class="alert hidden"></div>
 
-        <!-- Step 1: Discord Login -->
+        <!-- ==================== STEP 1: LOGIN ==================== -->
         <div id="step1" class="step-container">
             <div class="step-card">
                 <div class="step-header">
                     <div class="step-number">1</div>
-                    <h3>Login with Discord</h3>
+                    <div class="step-title-group">
+                        <h3>Login with Discord</h3>
+                        <span class="step-badge">Required</span>
+                    </div>
                 </div>
-                <p class="step-desc">First, login with your Discord account to continue.</p>
+                <p class="step-desc">
+                    You need to authenticate with Discord to link your Minecraft account.
+                </p>
+                
+                <div class="features-list">
+                    <div class="feature-item">
+                        <i class="fas fa-shield-alt"></i>
+                        <span>Secure Authentication</span>
+                    </div>
+                    <div class="feature-item">
+                        <i class="fas fa-bolt"></i>
+                        <span>Quick & Easy</span>
+                    </div>
+                    <div class="feature-item">
+                        <i class="fas fa-check-circle"></i>
+                        <span>Official Discord OAuth2</span>
+                    </div>
+                </div>
+
                 <button class="btn btn-discord" onclick="loginWithDiscord()">
                     <i class="fab fa-discord"></i>
                     Login with Discord
@@ -36,95 +71,205 @@
             </div>
         </div>
 
-        <!-- Step 2: Verification Form -->
+        <!-- ==================== STEP 2: VERIFICATION ==================== -->
         <div id="step2" class="step-container hidden">
-            <!-- User Card -->
+            <!-- User Profile Card -->
             <div class="user-card">
-                <img id="userAvatar" class="user-avatar" src="" alt="Avatar">
+                <div class="user-avatar-wrapper">
+                    <img id="userAvatar" class="user-avatar" src="" alt="Discord Avatar">
+                    <span class="online-dot"></span>
+                </div>
                 <div class="user-info">
                     <div id="userName" class="user-name">Loading...</div>
-                    <span class="badge badge-connected">
-                        <i class="fas fa-circle"></i> Connected
-                    </span>
+                    <div class="user-badges">
+                        <span class="badge badge-discord">
+                            <i class="fab fa-discord"></i> Connected
+                        </span>
+                    </div>
+                </div>
+                <div class="user-actions">
+                    <button class="btn-icon" onclick="logout()" title="Logout">
+                        <i class="fas fa-sign-out-alt"></i>
+                    </button>
                 </div>
             </div>
 
+            <!-- Verification Form -->
             <div class="step-card">
                 <div class="step-header">
                     <div class="step-number">2</div>
-                    <h3>Minecraft Username</h3>
+                    <div class="step-title-group">
+                        <h3>Minecraft Username</h3>
+                        <span class="step-badge step-badge-info">Verification</span>
+                    </div>
                 </div>
-                <p class="step-desc">Enter your exact Minecraft Java Edition username.</p>
+                <p class="step-desc">
+                    Enter your exact Minecraft Java Edition username to verify.
+                </p>
                 
                 <div class="input-group">
-                    <label>Username</label>
+                    <label class="input-label">
+                        <i class="fas fa-gamepad"></i> Minecraft Username
+                    </label>
                     <div class="input-wrapper">
-                        <i class="fas fa-gamepad"></i>
                         <input type="text" 
                                id="mcUsername" 
-                               placeholder="Enter your username" 
+                               class="minecraft-input" 
+                               placeholder="e.g. Notch"
                                maxlength="16"
-                               autocomplete="off">
+                               autocomplete="off"
+                               spellcheck="false">
+                        <div class="input-border"></div>
+                    </div>
+                    <span class="input-hint">3-16 characters, letters, numbers, underscore</span>
+                </div>
+
+                <!-- Skin Preview -->
+                <div id="skinPreviewContainer" class="skin-preview-container hidden">
+                    <img id="skinPreview" class="skin-preview" src="" alt="Minecraft Skin">
+                    <div class="skin-info">
+                        <span id="skinName" class="skin-name"></span>
+                        <span class="skin-badge">Skin Preview</span>
                     </div>
                 </div>
 
-                <img id="skinPreview" class="skin-preview hidden" src="" alt="Skin">
+                <!-- Terms -->
+                <div class="terms-box">
+                    <i class="fas fa-info-circle"></i>
+                    <p>By verifying, your Discord nickname will be changed to your Minecraft username and you'll receive the verified role.</p>
+                </div>
 
                 <button id="verifyBtn" class="btn btn-verify" onclick="submitVerification()">
                     <i class="fas fa-check-circle"></i>
                     Submit Verification
                 </button>
             </div>
-
-            <button class="btn btn-logout" onclick="logout()">
-                <i class="fas fa-sign-out-alt"></i>
-                Logout
-            </button>
         </div>
 
-        <!-- Step 3: Success -->
+        <!-- ==================== STEP 3: SUCCESS ==================== -->
         <div id="step3" class="step-container hidden">
-            <!-- User Card -->
+            <!-- User Profile Card -->
             <div class="user-card">
-                <img id="userAvatar3" class="user-avatar" src="" alt="Avatar">
+                <div class="user-avatar-wrapper">
+                    <img id="userAvatar3" class="user-avatar" src="" alt="Discord Avatar">
+                </div>
                 <div class="user-info">
                     <div id="userName3" class="user-name">Loading...</div>
-                    <span class="badge badge-pending">
-                        <i class="fas fa-clock"></i> Pending
-                    </span>
+                    <div class="user-badges">
+                        <span class="badge badge-pending">
+                            <i class="fas fa-clock"></i> Pending Approval
+                        </span>
+                    </div>
                 </div>
             </div>
 
+            <!-- Success Card -->
             <div class="step-card success-card">
-                <div class="success-icon">
-                    <i class="fas fa-check-circle"></i>
+                <div class="success-animation">
+                    <div class="success-circle">
+                        <i class="fas fa-check"></i>
+                    </div>
                 </div>
-                <h3 style="color: #4CAF50; margin-bottom: 15px;">Request Submitted!</h3>
-                <p class="step-desc">
-                    Your verification has been sent.<br>
-                    An admin will verify you soon.<br>
-                    Your nickname will change to your Minecraft username.
-                </p>
                 
-                <button class="btn btn-discord" onclick="joinDiscord()" style="margin-top: 20px;">
-                    <i class="fab fa-discord"></i>
-                    Join Discord Server
-                </button>
-            </div>
+                <h2 class="success-title">Verification Submitted!</h2>
+                <p class="success-desc">
+                    Your verification request has been sent successfully. 
+                    An administrator will review and approve your request soon.
+                </p>
 
-            <button class="btn btn-logout" onclick="logout()">
-                <i class="fas fa-sign-out-alt"></i>
-                Logout
-            </button>
+                <div class="info-cards">
+                    <div class="info-card">
+                        <i class="fas fa-user-check"></i>
+                        <div>
+                            <strong>Nickname Change</strong>
+                            <p>Your nickname will be set to your Minecraft username</p>
+                        </div>
+                    </div>
+                    <div class="info-card">
+                        <i class="fas fa-user-tag"></i>
+                        <div>
+                            <strong>Verified Role</strong>
+                            <p>You'll receive the verified role upon approval</p>
+                        </div>
+                    </div>
+                    <div class="info-card">
+                        <i class="fas fa-clock"></i>
+                        <div>
+                            <strong>Wait Time</strong>
+                            <p>Usually approved within a few minutes to hours</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="action-buttons">
+                    <button class="btn btn-discord" onclick="joinDiscord()">
+                        <i class="fab fa-discord"></i>
+                        Join Discord Server
+                    </button>
+                    <button class="btn btn-secondary" onclick="checkStatus()">
+                        <i class="fas fa-sync-alt"></i>
+                        Check Status
+                    </button>
+                </div>
+            </div>
         </div>
 
-        <!-- Server Info -->
-        <div class="server-info">
-            <i class="fas fa-server"></i>
-            <span id="serverInfo">Loading...</span>
+        <!-- ==================== STEP 4: VERIFIED ==================== -->
+        <div id="step4" class="step-container hidden">
+            <div class="user-card verified-card">
+                <div class="user-avatar-wrapper">
+                    <img id="userAvatar4" class="user-avatar verified-avatar" src="" alt="Discord Avatar">
+                </div>
+                <div class="user-info">
+                    <div id="userName4" class="user-name">Loading...</div>
+                    <div class="user-badges">
+                        <span class="badge badge-verified">
+                            <i class="fas fa-check-circle"></i> Verified
+                        </span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="step-card verified-success-card">
+                <div class="verified-icon">
+                    <i class="fas fa-trophy"></i>
+                </div>
+                <h2 class="success-title">You're Verified!</h2>
+                <p class="success-desc">
+                    Your account has been verified successfully.
+                    You now have access to the server!
+                </p>
+                
+                <div id="verifiedDetails" class="verified-details">
+                    <!-- Filled by JS -->
+                </div>
+
+                <button class="btn btn-discord" onclick="joinDiscord()">
+                    <i class="fab fa-discord"></i>
+                    Go to Discord
+                </button>
+            </div>
+        </div>
+
+        <!-- Footer -->
+        <div class="footer">
+            <div class="server-info">
+                <i class="fas fa-server"></i>
+                <span id="serverInfo">Loading server info...</span>
+            </div>
+            <div class="footer-links">
+                <a href="#" class="footer-link">Terms</a>
+                <span class="footer-divider">•</span>
+                <a href="#" class="footer-link">Privacy</a>
+                <span class="footer-divider">•</span>
+                <a href="#" class="footer-link">Support</a>
+            </div>
+            <p class="copyright">© 2024 Minecraft Verification System</p>
         </div>
     </div>
 
+    <!-- Scripts -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/particlesjs/2.2.2/particles.min.js"></script>
     <script type="module" src="script.js"></script>
 </body>
 </html>
